@@ -63,7 +63,8 @@ class MyRequestsActivity : AppCompatActivity() {
             }
         }
 
-        viewModel.load()
+        // Initial load is handled by onResume which always fires after
+        // onCreate; calling it here too would fire a duplicate request.
     }
 
     override fun onResume() {
