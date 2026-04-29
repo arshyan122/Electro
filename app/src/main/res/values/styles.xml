@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Make the status bar transparent -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <!-- Optional: make navigation bar transparent -->
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+
+    <!-- Fullscreen theme -->
+    <style name="Theme.AppCompat.Light.NoActionBar.FullScreen">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+    <style name="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Customize your theme here-->
+    </style>
+    <style name="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxBackgroundMode">outline</item>
+        <item name="boxStrokeColor">@color/white</item>
+        <item name="boxStrokeWidth">2dp</item>
+        <item name="hintTextColor">@color/black</item>
+    </style>
+</resources>
