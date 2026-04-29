@@ -1,7 +1,7 @@
 {
   "name": "electro-backend",
-  "version": "0.1.0",
-  "description": "Node + Express + SQLite + JWT backend for the Electro Android app",
+  "version": "0.2.0",
+  "description": "Node + Express + MongoDB + JWT backend for the Electro user and technician apps",
   "main": "src/server.js",
   "type": "commonjs",
   "scripts": {
@@ -17,6 +17,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
+    "firebase-admin": "^12.6.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.7.0"
   }
