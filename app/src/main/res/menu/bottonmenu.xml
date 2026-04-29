@@ -6,7 +6,7 @@
     <item android:title="Search"
         android:id="@+id/searchFragment"
         android:icon="@drawable/search"/>
-    <item android:title="Help"
+    <item android:title="Assistant"
         android:id="@+id/helpFragment"
         android:icon="@drawable/help_3"/>
     <item android:title="Account"

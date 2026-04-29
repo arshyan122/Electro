@@ -78,6 +78,59 @@ router.get(
 );
 
 /**
+ * Update the caller's editable profile fields. The user app's Account screen
+ * posts here when the customer hits "Save Information".
+ *
+ * Whitelist exactly four fields. Anything else in the body is ignored so a
+ * malicious client can't promote themselves to `role: 'technician'` or
+ * overwrite `passwordHash`.
+ */
+router.patch(
+  '/me',
+  authRequired,
+  asyncHandler(async (req, res) => {
+    const { name, email, phone, address } = req.body || {};
+    const update = {};
+
+    if (name !== undefined) {
+      const trimmed = String(name).trim();
+      if (trimmed.length < 1) {
+        return res.status(400).json({ error: 'Name cannot be empty.' });
+      }
+      update.name = trimmed;
+    }
+    if (email !== undefined) {
+      const trimmed = String(email).trim().toLowerCase();
+      if (!EMAIL_RE.test(trimmed)) {
+        return res.status(400).json({ error: 'A valid email is required.' });
+      }
+      update.email = trimmed;
+    }
+    if (phone !== undefined) update.phone = String(phone).trim();
+    if (address !== undefined) update.address = String(address).trim();
+
+    let user;
+    try {
+      user = await User.findByIdAndUpdate(
+        req.user.sub,
+        { $set: update },
+        { new: true, runValidators: true }
+      );
+    } catch (err) {
+      if (err && err.code === 11000) {
+        return res
+          .status(409)
+          .json({ error: 'An account with that email already exists.' });
+      }
+      throw err;
+    }
+
+    if (!user) return res.status(404).json({ error: 'User not found.' });
+    return res.json({ user: user.toJSON() });
+  })
+);
+
+/**
  * FCM token registration. Used by both the user app and the technician app.
  * Stored on the User doc so push fan-out only needs to query users.
  */

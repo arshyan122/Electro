@@ -6,7 +6,9 @@ const userSchema = new mongoose.Schema(
     name: { type: String, required: true, trim: true },
     passwordHash: { type: String, required: true },
     role: { type: String, enum: ['user', 'technician'], default: 'user', index: true },
-    fcmToken: { type: String, default: null }
+    fcmToken: { type: String, default: null },
+    phone: { type: String, default: '', trim: true },
+    address: { type: String, default: '', trim: true }
   },
   { timestamps: true, collection: 'users' }
 );
@@ -21,6 +23,8 @@ userSchema.set('toJSON', {
     delete ret.fcmToken;
     delete ret.createdAt;
     delete ret.updatedAt;
+    // `phone` / `address` ARE returned — they are profile data the user
+    // edits via PATCH /auth/me.
     return ret;
   }
 });

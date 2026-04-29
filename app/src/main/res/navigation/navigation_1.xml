@@ -17,9 +17,9 @@
         tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/helpFragment"
-        android:name="Fragment.HelpFragment"
-        android:label="fragment_help"
-        tools:layout="@layout/fragment_help" />
+        android:name="com.example.electro.ui.chat.ChatFragment"
+        android:label="fragment_chat"
+        tools:layout="@layout/fragment_chat" />
     <fragment
         android:id="@+id/accountFragment2"
         android:name="Fragment.AccountFragment"
