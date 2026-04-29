@@ -13,18 +13,19 @@ import com.example.electro.adapter.RemoteServiceAdapter
 import com.example.electro.databinding.FragmentSearchBinding
 import com.example.electro.ui.common.UiState
 import com.example.electro.ui.search.SearchViewModel
-import com.example.electro.ui.search.SearchViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * Search tab — observes SearchViewModel for the catalog and applies a
  * client-side filter on every query-text change.
  */
+@AndroidEntryPoint
 class SearchFragment : Fragment() {
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: SearchViewModel by viewModels { SearchViewModelFactory() }
+    private val viewModel: SearchViewModel by viewModels()
     private val adapter = RemoteServiceAdapter { product ->
         Toast.makeText(requireContext(), product.title, Toast.LENGTH_SHORT).show()
     }
