@@ -17,7 +17,7 @@ import com.example.electro.adapter.RemotePopularServiceAdapter
 import com.example.electro.databinding.FragmentHomeBinding
 import com.example.electro.ui.common.UiState
 import com.example.electro.ui.home.HomeViewModel
-import com.example.electro.ui.home.HomeViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * Home tab — image slider + remote-driven "Popular Services" list.
@@ -26,12 +26,13 @@ import com.example.electro.ui.home.HomeViewModelFactory
  * hard-coded data. UI/layout XML is intentionally untouched; only the data
  * source has changed.
  */
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: HomeViewModel by viewModels { HomeViewModelFactory() }
+    private val viewModel: HomeViewModel by viewModels()
     private val popularAdapter = RemotePopularServiceAdapter { product ->
         Toast.makeText(requireContext(), product.title, Toast.LENGTH_SHORT).show()
     }

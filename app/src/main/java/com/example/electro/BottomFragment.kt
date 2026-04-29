@@ -11,18 +11,19 @@ import com.example.electro.adapter.RemoteServiceAdapter
 import com.example.electro.databinding.FragmentBottomBinding
 import com.example.electro.ui.common.UiState
 import com.example.electro.ui.search.SearchViewModel
-import com.example.electro.ui.search.SearchViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * "All Services" bottom sheet — observes SearchViewModel for the catalog.
  */
+@AndroidEntryPoint
 class BottomFragment : BottomSheetDialogFragment() {
 
     private var _binding: FragmentBottomBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: SearchViewModel by viewModels { SearchViewModelFactory() }
+    private val viewModel: SearchViewModel by viewModels()
     private val adapter = RemoteServiceAdapter { product ->
         Toast.makeText(requireContext(), product.title, Toast.LENGTH_SHORT).show()
     }

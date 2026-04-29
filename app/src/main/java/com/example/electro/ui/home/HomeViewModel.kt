@@ -7,7 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.electro.data.model.Product
 import com.example.electro.data.repository.ProductRepository
 import com.example.electro.ui.common.UiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Drives HomeFragment's "Popular Services" RecyclerView.
@@ -16,8 +18,9 @@ import kotlinx.coroutines.launch
  * observes. `loadPopularProducts()` is idempotent and safe to call from
  * `onViewCreated`; it short-circuits if a successful load is already cached.
  */
-class HomeViewModel(
-    private val repository: ProductRepository = ProductRepository()
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val repository: ProductRepository
 ) : ViewModel() {
 
     private val _uiState = MutableLiveData<UiState<List<Product>>>(UiState.Loading)

@@ -7,7 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.electro.data.model.Product
 import com.example.electro.data.repository.ProductRepository
 import com.example.electro.ui.common.UiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Drives both the Search tab and the "All Services" bottom sheet.
@@ -15,8 +17,9 @@ import kotlinx.coroutines.launch
  * Loads the full electronics catalog once and exposes a derived,
  * client-side-filtered list via `setQuery(...)`.
  */
-class SearchViewModel(
-    private val repository: ProductRepository = ProductRepository()
+@HiltViewModel
+class SearchViewModel @Inject constructor(
+    private val repository: ProductRepository
 ) : ViewModel() {
 
     private val _uiState = MutableLiveData<UiState<List<Product>>>(UiState.Loading)
