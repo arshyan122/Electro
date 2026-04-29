@@ -203,19 +203,32 @@ router.patch(
       return res.status(400).json({ error: 'Invalid request id.' });
     }
     const { status } = req.body || {};
-    const ALLOWED = ['in_progress', 'completed'];
-    if (!ALLOWED.includes(status)) {
-      return res
-        .status(400)
-        .json({ error: `status must be one of: ${ALLOWED.join(', ')}.` });
+    // Allowed transitions: accepted -> in_progress -> completed.
+    // Each target status has a specific set of legal predecessors.
+    const TRANSITIONS = {
+      in_progress: ['accepted'],
+      completed: ['accepted', 'in_progress']
+    };
+    if (!Object.prototype.hasOwnProperty.call(TRANSITIONS, status)) {
+      return res.status(400).json({
+        error: `status must be one of: ${Object.keys(TRANSITIONS).join(', ')}.`
+      });
     }
     const updated = await ServiceRequest.findOneAndUpdate(
-      { _id: req.params.id, technicianId: req.user.sub },
+      {
+        _id: req.params.id,
+        technicianId: req.user.sub,
+        status: { $in: TRANSITIONS[status] }
+      },
       { $set: { status } },
       { new: true }
     );
     if (!updated) {
-      return res.status(404).json({ error: 'Request not found or not yours.' });
+      // Either the request isn't ours, doesn't exist, or its current status
+      // doesn't allow the requested transition (e.g. cancelled, completed).
+      return res.status(409).json({
+        error: 'Cannot transition this request to the requested status.'
+      });
     }
 
     // Notify customer.
