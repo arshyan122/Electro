@@ -57,20 +57,28 @@ router.post(
       throw err;
     }
 
-    await Technician.create({
-      userId: user._id,
-      phone: (phone || '').trim(),
-      specialization: Array.isArray(specialization)
-        ? specialization
-        : typeof specialization === 'string' && specialization.length > 0
-        ? specialization.split(',').map((s) => s.trim()).filter(Boolean)
-        : [],
-      experienceYears: Number.isFinite(Number(experienceYears))
-        ? Number(experienceYears)
-        : 0,
-      bio: (bio || '').toString().slice(0, 500),
-      available: true
-    });
+    // Create the Technician profile. If anything below throws (e.g. unforeseen
+    // schema validation), best-effort delete the User we just created so the
+    // caller can re-register with the same email.
+    try {
+      await Technician.create({
+        userId: user._id,
+        phone: (phone || '').trim(),
+        specialization: Array.isArray(specialization)
+          ? specialization
+          : typeof specialization === 'string' && specialization.length > 0
+          ? specialization.split(',').map((s) => s.trim()).filter(Boolean)
+          : [],
+        experienceYears: Number.isFinite(Number(experienceYears))
+          ? Math.max(0, Number(experienceYears))
+          : 0,
+        bio: (bio || '').toString().slice(0, 500),
+        available: true
+      });
+    } catch (err) {
+      await User.deleteOne({ _id: user._id }).catch(() => {});
+      throw err;
+    }
 
     const safe = user.toJSON();
     return res.status(201).json({ token: signToken(safe), user: safe });
