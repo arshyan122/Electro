@@ -9,6 +9,7 @@
     </string-array>
     <!-- Chatbot ("Help") screen -->
     <string name="chat_title">Electro Assistant</string>
+    <string name="chat_subtitle">Online · powered by Gemini</string>
     <string name="chat_input_hint">Ask me anything…</string>
     <string name="chat_send">Send</string>
     <string name="chat_clear">Clear chat</string>
