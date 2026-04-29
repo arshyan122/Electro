@@ -95,7 +95,7 @@ class GeminiRepository @Inject constructor(
     data class ChatTurn(val role: ChatRole, val text: String)
 
     companion object {
-        private const val MODEL = "gemini-1.5-flash"
+        private const val MODEL = "gemini-2.5-flash"
         private const val DEVELOPER_REPLY = "This app was developed by Arshyan."
 
         /**
