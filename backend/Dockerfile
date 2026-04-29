@@ -11,5 +11,4 @@ ENV NODE_ENV=production
 ENV PORT=8080
 EXPOSE 8080
 
-# On first boot, seed the SQLite DB if it doesn't exist, then start.
-CMD ["sh", "-c", "[ -f ./electro.db ] || npm run seed; npm start"]
+CMD ["npm", "start"]

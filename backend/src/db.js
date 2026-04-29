@@ -1,39 +1,36 @@
-const path = require('path');
-const Database = require('better-sqlite3');
+const mongoose = require('mongoose');
 
-const DB_PATH = process.env.DB_PATH || path.join(__dirname, '..', 'electro.db');
-const db = new Database(DB_PATH);
-db.pragma('journal_mode = WAL');
-db.pragma('foreign_keys = ON');
+/**
+ * Connects mongoose to the MongoDB instance configured via $MONGODB_URI.
+ * Resolves the existing connection on subsequent calls so routes can `await`
+ * this lazily without juggling startup ordering.
+ */
+let connecting = null;
 
-db.exec(`
-  CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    email TEXT NOT NULL UNIQUE,
-    name TEXT NOT NULL,
-    password_hash TEXT NOT NULL,
-    created_at TEXT NOT NULL DEFAULT (datetime('now'))
-  );
+async function connect() {
+  if (mongoose.connection.readyState === 1) return mongoose.connection;
+  if (connecting) return connecting;
 
-  CREATE TABLE IF NOT EXISTS products (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT NOT NULL,
-    price REAL NOT NULL,
-    description TEXT NOT NULL,
-    category TEXT NOT NULL,
-    image TEXT NOT NULL,
-    rating_rate REAL DEFAULT 0,
-    rating_count INTEGER DEFAULT 0
-  );
+  const uri = process.env.MONGODB_URI;
+  if (!uri) {
+    throw new Error('MONGODB_URI is not set. Copy backend/.env.example to backend/.env and fill it in.');
+  }
 
-  CREATE TABLE IF NOT EXISTS services (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    description TEXT NOT NULL,
-    price REAL NOT NULL,
-    icon TEXT NOT NULL,
-    category TEXT NOT NULL
-  );
-`);
+  mongoose.set('strictQuery', true);
+  connecting = mongoose
+    .connect(uri, {
+      serverSelectionTimeoutMS: 10_000
+    })
+    .then((m) => {
+      console.log(`[db] connected to ${m.connection.name}`);
+      return m.connection;
+    })
+    .catch((err) => {
+      connecting = null;
+      throw err;
+    });
 
-module.exports = db;
+  return connecting;
+}
+
+module.exports = { connect, mongoose };

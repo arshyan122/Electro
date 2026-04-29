@@ -3,7 +3,8 @@ package com.example.electro.data.model
 import com.google.gson.annotations.SerializedName
 
 data class User(
-    @SerializedName("id") val id: Int,
+    /** Backend-assigned identifier. Mongo returns an ObjectId string here. */
+    @SerializedName("id") val id: String,
     @SerializedName("email") val email: String,
     @SerializedName("name") val name: String
 )
