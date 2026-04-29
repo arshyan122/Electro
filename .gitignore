@@ -13,3 +13,11 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Backend
+backend/node_modules/
+backend/.env
+backend/*.db
+backend/*.db-shm
+backend/*.db-wal
+backend/*.db-journal
