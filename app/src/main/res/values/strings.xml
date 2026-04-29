@@ -7,6 +7,21 @@
         <item>Lucknow</item>
         <item>Banaras</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Chatbot ("Help") screen -->
+    <string name="chat_title">Electro Assistant</string>
+    <string name="chat_input_hint">Ask me anything…</string>
+    <string name="chat_send">Send</string>
+    <string name="chat_clear">Clear chat</string>
+
+    <!-- Account screen -->
+    <string name="account_title">My account</string>
+    <string name="account_name">Full name</string>
+    <string name="account_email">Email</string>
+    <string name="account_phone">Phone</string>
+    <string name="account_address">Address</string>
+    <string name="account_save">Save changes</string>
+    <string name="account_save_success">Profile updated.</string>
+    <string name="account_logout">Logout</string>
+    <string name="account_validation_name">Please enter your name.</string>
+    <string name="account_validation_email">Please enter a valid email.</string>
 </resources>

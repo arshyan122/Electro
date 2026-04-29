@@ -4,6 +4,7 @@ import com.example.electro.data.local.TokenStorage
 import com.example.electro.data.model.AuthResponse
 import com.example.electro.data.model.LoginRequest
 import com.example.electro.data.model.SignupRequest
+import com.example.electro.data.model.UpdateProfileRequest
 import com.example.electro.data.model.User
 import com.example.electro.data.remote.ApiService
 import com.google.gson.Gson
@@ -43,6 +44,20 @@ class AuthRepository @Inject constructor(
         runCatching { apiService.me().user }
             .recoverCatching { throw it.toApiError() }
     }
+
+    /**
+     * PATCH /auth/me. The caller passes only the fields they want to change;
+     * `null` values are dropped by Gson before serialization (we tell Gson to
+     * not include nulls? no — instead we let the server interpret missing
+     * keys as "no change", and `null` becomes a key with value `null`. To be
+     * safe we always pass concrete strings, never null, when the user has
+     * actually edited the field).
+     */
+    suspend fun updateMe(body: UpdateProfileRequest): Result<User> =
+        withContext(Dispatchers.IO) {
+            runCatching { apiService.updateMe(body).user }
+                .recoverCatching { throw it.toApiError() }
+        }
 
     fun logout() = tokenStorage.clear()
     fun isLoggedIn(): Boolean = tokenStorage.isLoggedIn()

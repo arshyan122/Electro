@@ -15,4 +15,18 @@
     <color name="gainsboro">#DCDCDC</color>
     <color name="green">#4CAF50</color>
 
+    <!-- Material3 brand palette for the Electro user app. -->
+    <color name="electro_primary">#1976D2</color>
+    <color name="electro_primary_dark">#0D47A1</color>
+    <color name="electro_secondary">#00BFA5</color>
+    <color name="electro_surface">#FAFAFA</color>
+    <color name="electro_on_surface">#1B1B1F</color>
+    <color name="electro_outline">#E2E2EA</color>
+
+    <!-- Chat screen palette. -->
+    <color name="chat_background">#F5F7FB</color>
+    <color name="chat_input_background">#F0F1F4</color>
+    <color name="chat_bubble_border">#E1E5EE</color>
+    <color name="chat_error_background">#FFF2F2</color>
+    <color name="chat_error_border">#F5C2C7</color>
 </resources>

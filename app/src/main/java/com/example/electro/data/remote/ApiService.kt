@@ -7,9 +7,11 @@ import com.example.electro.data.model.Product
 import com.example.electro.data.model.Service
 import com.example.electro.data.model.ServiceRequest
 import com.example.electro.data.model.SignupRequest
+import com.example.electro.data.model.UpdateProfileRequest
 import com.example.electro.data.model.User
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 
@@ -31,6 +33,9 @@ interface ApiService {
 
     @GET("auth/me")
     suspend fun me(): MeResponse
+
+    @PATCH("auth/me")
+    suspend fun updateMe(@Body body: UpdateProfileRequest): MeResponse
 
     // --- Products ---
 

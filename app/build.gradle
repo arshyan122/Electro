@@ -21,6 +21,13 @@ android {
         // 10.0.2.2 maps to the host machine's localhost from the Android emulator.
         // Override per-build-type below to point at a deployed backend.
         buildConfigField "String", "BASE_URL", "\"http://10.0.2.2:8080/\""
+
+        // Gemini API key. Pulled from a Gradle property or environment variable
+        // (`-PGEMINI_API_KEY=...` on the command line, GEMINI_API_KEY in
+        // ~/.gradle/gradle.properties, or as an env var on CI). Never commit
+        // a real key. The chat screen surfaces a helpful error if this is empty.
+        def geminiKey = (project.findProperty("GEMINI_API_KEY") ?: System.getenv("GEMINI_API_KEY") ?: "").toString()
+        buildConfigField "String", "GEMINI_API_KEY", "\"" + geminiKey + "\""
     }
     buildFeatures{
         viewBinding true
@@ -74,6 +81,9 @@ dependencies {
 
     // CardView (used by My Requests list items)
     implementation 'androidx.cardview:cardview:1.0.0'
+
+    // SwipeRefreshLayout (Account screen, etc.)
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
     // Hilt DI
     implementation 'com.google.dagger:hilt-android:2.48'

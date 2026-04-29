@@ -6,7 +6,18 @@ data class User(
     /** Backend-assigned identifier. Mongo returns an ObjectId string here. */
     @SerializedName("id") val id: String,
     @SerializedName("email") val email: String,
-    @SerializedName("name") val name: String
+    @SerializedName("name") val name: String,
+    @SerializedName("phone") val phone: String = "",
+    @SerializedName("address") val address: String = "",
+    @SerializedName("role") val role: String = "user"
+)
+
+/** Body for PATCH /auth/me. Any null field is omitted server-side. */
+data class UpdateProfileRequest(
+    @SerializedName("name") val name: String? = null,
+    @SerializedName("email") val email: String? = null,
+    @SerializedName("phone") val phone: String? = null,
+    @SerializedName("address") val address: String? = null
 )
 
 data class SignupRequest(
