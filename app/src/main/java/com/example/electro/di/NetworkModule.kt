@@ -1,6 +1,8 @@
 package com.example.electro.di
 
+import com.example.electro.BuildConfig
 import com.example.electro.data.remote.ApiService
+import com.example.electro.data.remote.AuthInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,13 +16,11 @@ import javax.inject.Singleton
 
 /**
  * Provides the network stack as application-scoped singletons.
- * Replaces the manual `RetrofitClient` object with Hilt-managed bindings.
+ * `BuildConfig.BASE_URL` is set per build type in `app/build.gradle`.
  */
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-
-    private const val BASE_URL = "https://fakestoreapi.com/"
 
     @Provides
     @Singleton
@@ -29,18 +29,21 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(logging: HttpLoggingInterceptor): OkHttpClient =
-        OkHttpClient.Builder()
-            .addInterceptor(logging)
-            .connectTimeout(20, TimeUnit.SECONDS)
-            .readTimeout(20, TimeUnit.SECONDS)
-            .build()
+    fun provideOkHttpClient(
+        logging: HttpLoggingInterceptor,
+        authInterceptor: AuthInterceptor
+    ): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(authInterceptor)
+        .addInterceptor(logging)
+        .connectTimeout(20, TimeUnit.SECONDS)
+        .readTimeout(20, TimeUnit.SECONDS)
+        .build()
 
     @Provides
     @Singleton
     fun provideRetrofit(client: OkHttpClient): Retrofit =
         Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BuildConfig.BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
