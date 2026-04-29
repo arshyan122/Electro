@@ -54,7 +54,10 @@ router.post(
       return res.status(400).json({ error: 'Email and password are required.' });
     }
     const user = await User.findOne({ email: email.trim().toLowerCase() });
-    if (!user) return res.status(401).json({ error: 'Invalid email or password.' });
+    if (!user || user.role === 'technician') {
+      // Technicians must use POST /technician/login.
+      return res.status(401).json({ error: 'Invalid email or password.' });
+    }
 
     const ok = await bcrypt.compare(password, user.passwordHash);
     if (!ok) return res.status(401).json({ error: 'Invalid email or password.' });
@@ -71,6 +74,23 @@ router.get(
     const user = await User.findById(req.user.sub);
     if (!user) return res.status(404).json({ error: 'User not found.' });
     return res.json({ user: user.toJSON() });
+  })
+);
+
+/**
+ * FCM token registration. Used by both the user app and the technician app.
+ * Stored on the User doc so push fan-out only needs to query users.
+ */
+router.post(
+  '/fcm-token',
+  authRequired,
+  asyncHandler(async (req, res) => {
+    const { token } = req.body || {};
+    if (typeof token !== 'string' || token.length < 10) {
+      return res.status(400).json({ error: 'A valid FCM token is required.' });
+    }
+    await User.updateOne({ _id: req.user.sub }, { $set: { fcmToken: token } });
+    return res.json({ ok: true });
   })
 );
 
