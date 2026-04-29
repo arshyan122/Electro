@@ -89,13 +89,14 @@ class HomeFragment : Fragment() {
         viewModel.uiState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is UiState.Loading -> {
-                    // RecyclerView stays empty; could plug in a ProgressBar
-                    // here once a layout slot is added.
+                    binding.loadingProgressBar.visibility = View.VISIBLE
                 }
                 is UiState.Success -> {
+                    binding.loadingProgressBar.visibility = View.GONE
                     popularAdapter.submitList(state.data)
                 }
                 is UiState.Error -> {
+                    binding.loadingProgressBar.visibility = View.GONE
                     popularAdapter.submitList(emptyList())
                     Toast.makeText(requireContext(), state.message, Toast.LENGTH_LONG).show()
                 }
