@@ -29,4 +29,5 @@
     <color name="chat_bubble_border">#E1E5EE</color>
     <color name="chat_error_background">#FFF2F2</color>
     <color name="chat_error_border">#F5C2C7</color>
+    <color name="chat_subtitle">#6B7280</color>
 </resources>
