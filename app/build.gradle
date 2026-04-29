@@ -17,15 +17,22 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // 10.0.2.2 maps to the host machine's localhost from the Android emulator.
+        // Override per-build-type below to point at a deployed backend.
+        buildConfigField "String", "BASE_URL", "\"http://10.0.2.2:8080/\""
     }
     buildFeatures{
         viewBinding true
+        buildConfig true
     }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            // Replace with your deployed backend URL (must end with /).
+            buildConfigField "String", "BASE_URL", "\"https://your-electro-backend.example.com/\""
         }
     }
     compileOptions {
@@ -68,6 +75,9 @@ dependencies {
     // Hilt DI
     implementation 'com.google.dagger:hilt-android:2.48'
     kapt 'com.google.dagger:hilt-compiler:2.48'
+
+    // EncryptedSharedPreferences for JWT storage
+    implementation 'androidx.security:security-crypto:1.1.0-alpha06'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
