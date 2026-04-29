@@ -1,5 +1,6 @@
 package Fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.electro.adapter.RemoteServiceAdapter
 import com.example.electro.databinding.FragmentSearchBinding
 import com.example.electro.ui.common.UiState
+import com.example.electro.ui.requests.BookServiceActivity
 import com.example.electro.ui.search.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,7 +29,13 @@ class SearchFragment : Fragment() {
 
     private val viewModel: SearchViewModel by viewModels()
     private val adapter = RemoteServiceAdapter { product ->
-        Toast.makeText(requireContext(), product.title, Toast.LENGTH_SHORT).show()
+        startActivity(
+            Intent(requireContext(), BookServiceActivity::class.java)
+                .putExtra(BookServiceActivity.EXTRA_CATEGORY, product.category)
+                .putExtra(BookServiceActivity.EXTRA_TITLE, product.title)
+                .putExtra(BookServiceActivity.EXTRA_DESCRIPTION, product.description)
+                .putExtra(BookServiceActivity.EXTRA_PRICE, product.price)
+        )
     }
 
     override fun onCreateView(

@@ -1,9 +1,11 @@
 package com.example.electro.data.remote
 
 import com.example.electro.data.model.AuthResponse
+import com.example.electro.data.model.CreateRequestBody
 import com.example.electro.data.model.LoginRequest
 import com.example.electro.data.model.Product
 import com.example.electro.data.model.Service
+import com.example.electro.data.model.ServiceRequest
 import com.example.electro.data.model.SignupRequest
 import com.example.electro.data.model.User
 import retrofit2.http.Body
@@ -48,6 +50,17 @@ interface ApiService {
 
     @GET("services/category/{category}")
     suspend fun getServicesByCategory(@Path("category") category: String): List<Service>
+
+    // --- Service requests (customer side) ---
+
+    @POST("requests")
+    suspend fun createRequest(@Body body: CreateRequestBody): ServiceRequest
+
+    @GET("requests/mine")
+    suspend fun getMyRequests(): List<ServiceRequest>
+
+    @POST("requests/{id}/cancel")
+    suspend fun cancelRequest(@Path("id") id: String): ServiceRequest
 }
 
 data class MeResponse(val user: User)

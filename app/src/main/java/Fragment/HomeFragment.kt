@@ -1,5 +1,6 @@
 package Fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ import com.example.electro.adapter.RemotePopularServiceAdapter
 import com.example.electro.databinding.FragmentHomeBinding
 import com.example.electro.ui.common.UiState
 import com.example.electro.ui.home.HomeViewModel
+import com.example.electro.ui.requests.BookServiceActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -34,7 +36,13 @@ class HomeFragment : Fragment() {
 
     private val viewModel: HomeViewModel by viewModels()
     private val popularAdapter = RemotePopularServiceAdapter { product ->
-        Toast.makeText(requireContext(), product.title, Toast.LENGTH_SHORT).show()
+        startActivity(
+            Intent(requireContext(), BookServiceActivity::class.java)
+                .putExtra(BookServiceActivity.EXTRA_CATEGORY, product.category)
+                .putExtra(BookServiceActivity.EXTRA_TITLE, product.title)
+                .putExtra(BookServiceActivity.EXTRA_DESCRIPTION, product.description)
+                .putExtra(BookServiceActivity.EXTRA_PRICE, product.price)
+        )
     }
 
     override fun onCreateView(
